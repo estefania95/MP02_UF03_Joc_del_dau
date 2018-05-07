@@ -8,8 +8,12 @@ returns int
 as begin
 	declare @donar as bit
 	declare @puntsTotals1 as int, @puntsTotals2 as int
-	set @puntsTotals1 = (select sum(puntsAnotats) from Marcadors where @num_jugador = nJugadorAnota)
-	set @puntsTotals2 = (select sum(puntsAnotats) from Marcadors where @num_jugador != nJugadorAnota)
+	set @puntsTotals1 = coalesce((select sum(puntsAnotats) 
+					from Marcador 
+					where @num_jugador = nJugadorAnota),0)
+	set @puntsTotals2 = coalesce((select sum(puntsAnotats) 
+					from Marcador 
+					where @num_jugador != nJugadorAnota),0)
 	
 	if (@puntsTotals1<@puntsTotals2)
 	begin
